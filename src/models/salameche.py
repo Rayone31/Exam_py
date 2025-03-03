@@ -4,5 +4,5 @@ from models.event import Event
 
 
 class Salameche(Pokemon, Action, Event):
-    def __init__(self, name):
-        super().__init__(name, "Salameche", 100, 1, 10, 30)
+    def __init__(self, name,level):
+        super().__init__(name, "Salameche", 100, level, 10, 30)

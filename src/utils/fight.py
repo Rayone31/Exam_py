@@ -8,15 +8,20 @@ def combat_interface(pokemon, opponent):
     while pokemon.alive and opponent.alive:
         clear()
         print("=============================================== Combat ========================================================")
-        print(f"Votre Pokémon: {pokemon.name} | Vie: {pokemon.health} | Défense: {pokemon.defense}")
-        print(f"Dresseur Pokémon: {opponent.name} | Vie: {opponent.health} | Défense: {opponent.defense}")
+        print(f"Votre Pokémon: {pokemon.name} | Vie: {pokemon.health} | Défense: {pokemon.defense} | Niveau: {pokemon.level}")
+        print(f"Dresseur Pokémon: {opponent.name} | Vie: {opponent.health} | Défense: {opponent.defense} | Niveau: {opponent.level}")
         print("1. Attaquer")
         print("2. Défendre")
-        choice = int(input("Enter your choice: "))
         
-        if choice not in [1, 2]:
-            print("Invalid choice. Please enter a valid number.")
-            continue
+        while True:
+            try:
+                choice = int(input("Enter your choice: "))
+                if choice in [1, 2]:
+                    break
+                else:
+                    print("Invalid choice. Please enter a valid number.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
         
         opponent_choice = random.choice([1, 2])
         
@@ -51,7 +56,7 @@ def combat_interface(pokemon, opponent):
             print("Les deux Pokémon se préparent à se défendre!")
 
         if opponent.health <= 0:
-            print(f"{opponent.name} est mort.")
+            print(f"{opponent.name} est KO.")
             opponent.alive = False
             experience_gained = random.randint(100, 200)
             pokemon.experience += experience_gained
@@ -59,7 +64,7 @@ def combat_interface(pokemon, opponent):
             break
         
         if pokemon.health <= 0:
-            print(f"{pokemon.name} est mort.")
+            print(f"{pokemon.name} est KO.")
             pokemon.alive = False
             break
         

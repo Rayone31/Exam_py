@@ -1,6 +1,6 @@
 from utils.helpers import clear, get_ordered_actions
 from utils.menu import menus
-from models.event import Event, generate_random_event
+from models.event import generate_random_event
 from utils.fight import combat_interface
 from models.dresseur import Dresseur
 
@@ -32,13 +32,18 @@ def game(pokemon):
             if pokemon.experience >= pokemon.experience_max:
                 pokemon.levelUp()
 
-        choice, action = menus(pokemon, event_name)
-        actions = get_ordered_actions()
-        if 1 <= choice <= len(actions):
-            action_method = getattr(pokemon, actions[choice - 1])
-            action_method()
-            pokemon.experience += 10
-        else:
-            print("Invalid choice. Please enter a valid number.")
+        while True:
+            try:
+                choice, action = menus(pokemon, event_name)
+                actions = get_ordered_actions()
+                if 1 <= choice <= len(actions):
+                    action_method = getattr(pokemon, actions[choice - 1])
+                    action_method()
+                    pokemon.experience += 10
+                    break
+                else:
+                    print("Invalid choice. Please enter a valid number.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
 
         clear()

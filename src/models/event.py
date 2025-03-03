@@ -15,11 +15,9 @@ class Event:
             raise ValueError("Unknown event type")
 
     def _trigger_passive(self):
-        # Actions automatiques pour les événements passifs
         return f"Événement passif déclenché: {self.name}"
 
     def _trigger_active(self):
-        # Actions nécessitant une interaction pour les événements actifs
         return f"Événement actif déclenché: {self.name}. Action requise: {self.action}"
 
 def generate_random_event():
@@ -30,7 +28,8 @@ def generate_random_event():
         Event("Votre Pokémon est tombé malade", "passive"),
         Event("Un dresseur veut vous combattre", "active", "Combattre le dresseur")
     ]
-    return random.choice(events)
+    weights = [0.7, 0.1, 0.1, 0.06, 0.04]  
+    return random.choices(events, weights=weights, k=1)[0]
 
 # Exemple d'utilisation
 if __name__ == "__main__":

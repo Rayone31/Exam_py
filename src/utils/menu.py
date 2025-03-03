@@ -28,8 +28,17 @@ def menus(pokemon, event_name=None):
     for i, action in enumerate(actions, 1):
         print(f"{i}. {action.capitalize()}")
     print("_________________________________________________________________________________________________________________")
-    choice = int(input("Enter your choice: "))
-    selected_action = actions[choice - 1]
+    
+    while True:
+        try:
+            choice = int(input("Enter your choice: "))
+            if 1 <= choice <= len(actions):
+                selected_action = actions[choice - 1]
+                break
+            else:
+                print("Invalid choice. Please enter a valid number.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
     
     clear()
     return choice, selected_action
