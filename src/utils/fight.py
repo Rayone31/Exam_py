@@ -1,74 +1,39 @@
-import random
-from utils.helpers import clear
+type_avantages = {
+    "Feu": {"Plante": 1.5, "Eau": 0.75},
+    "Eau": {"Feu": 1.5, "Plante": 0.75},
+    "Plante": {"Eau": 1.5, "Feu": 0.75}
+}
 
-def combat_interface(pokemon, opponent):
-    original_pokemon_defense = pokemon.defense
-    original_opponent_defense = opponent.defense
+def calculate_damage(attacker, defender):
+    damage_multiplier = type_avantages.get(attacker.type, {}).get(defender.type, 1)
+    return attacker.attack * damage_multiplier
 
-    while pokemon.alive and opponent.alive:
-        clear()
-        print("=============================================== Combat ========================================================")
-        print(f"Votre Pokémon: {pokemon.name} | Vie: {pokemon.health} | Défense: {pokemon.defense} | Niveau: {pokemon.level}")
-        print(f"Dresseur Pokémon: {opponent.name} | Vie: {opponent.health} | Défense: {opponent.defense} | Niveau: {opponent.level}")
-        print("1. Attaquer")
-        print("2. Défendre")
-        
-        while True:
-            try:
-                choice = int(input("Enter your choice: "))
-                if choice in [1, 2]:
-                    break
-                else:
-                    print("Invalid choice. Please enter a valid number.")
-            except ValueError:
-                print("Invalid input. Please enter a number.")
-        
-        opponent_choice = random.choice([1, 2])
-        
-        if choice == 1 and opponent_choice == 1:
-            damage_to_opponent = pokemon.attack
-            damage_to_pokemon = opponent.attack
-            opponent.health -= damage_to_opponent
-            pokemon.health -= damage_to_pokemon
-            print(f"Vous avez attaqué {opponent.name} et infligé {damage_to_opponent} dégâts à sa santé!")
-            print(f"{opponent.name} a attaqué {pokemon.name} et infligé {damage_to_pokemon} dégâts à votre santé!")
-        elif choice == 1 and opponent_choice == 2:
-            if opponent.defense > 0:
-                damage_to_opponent_defense = min(pokemon.attack, opponent.defense)
-                opponent.defense -= damage_to_opponent_defense
-                print(f"Vous avez attaqué {opponent.name} et infligé {damage_to_opponent_defense} dégâts à sa défense!")
-            else:
-                damage_to_opponent = pokemon.attack
-                opponent.health -= damage_to_opponent
-                print(f"Vous avez attaqué {opponent.name} et infligé {damage_to_opponent} dégâts à sa santé!")
-            print(f"{opponent.name} se défend contre votre attaque!")
-        elif choice == 2 and opponent_choice == 1:
-            if pokemon.defense > 0:
-                damage_to_pokemon_defense = min(opponent.attack, pokemon.defense)
-                pokemon.defense -= damage_to_pokemon_defense
-                print(f"{opponent.name} a attaqué {pokemon.name} et infligé {damage_to_pokemon_defense} dégâts à votre défense!")
-            else:
-                damage_to_pokemon = opponent.attack
-                pokemon.health -= damage_to_pokemon
-                print(f"{opponent.name} a attaqué {pokemon.name} et infligé {damage_to_pokemon} dégâts à votre santé!")
-            print(f"Vous vous défendez contre l'attaque de {opponent.name}!")
-        elif choice == 2 and opponent_choice == 2:
-            print("Les deux Pokémon se préparent à se défendre!")
+def attack(pokemon, opponent):
+    damage_to_opponent = calculate_damage(pokemon, opponent)
+    damage_to_pokemon = opponent.attack
+    opponent.health -= damage_to_opponent
+    pokemon.health -= damage_to_pokemon
+    return damage_to_opponent, damage_to_pokemon
 
-        if opponent.health <= 0:
-            print(f"{opponent.name} est KO.")
-            opponent.alive = False
-            experience_gained = random.randint(100, 200)
-            pokemon.experience += experience_gained
-            print(f"Votre Pokémon a gagné {experience_gained} points d'expérience!")
-            break
-        
-        if pokemon.health <= 0:
-            print(f"{pokemon.name} est KO.")
-            pokemon.alive = False
-            break
-        
-        input("Appuyez sur Entrée pour continuer...")
+def defend(pokemon, opponent):
+    damage_multiplier = type_avantages.get(opponent.type, {}).get(pokemon.type, 1)
+    if pokemon.defense > 0:
+        damage_to_pokemon_defense = min(opponent.attack * damage_multiplier, pokemon.defense)
+        pokemon.defense -= damage_to_pokemon_defense
+        return damage_to_pokemon_defense, 0
+    else:
+        damage_to_pokemon = opponent.attack * damage_multiplier
+        pokemon.health -= damage_to_pokemon
+        return 0, damage_to_pokemon
 
-    pokemon.defense = original_pokemon_defense
-    opponent.defense = original_opponent_defense
+def use_potion(pokemon, potion_name):
+    if potion_name == "Petite Potion":
+        pokemon.health = min(pokemon.health + 20, pokemon.healthmax)
+    elif potion_name == "Moyenne Potion":
+        pokemon.health = min(pokemon.health + 50, pokemon.healthmax)
+    elif potion_name == "Grande Potion":
+        pokemon.health = min(pokemon.health + 100, pokemon.healthmax)
+    elif potion_name == "Potion Max":
+        pokemon.health = pokemon.healthmax
+    elif potion_name == "Antidote":
+        pokemon.condition = "Normal"

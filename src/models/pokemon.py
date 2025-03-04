@@ -1,6 +1,9 @@
+from colorama import Fore, Style, init
+
 class Pokemon:
-    def __init__(self, name, type, health, level, base_attack, base_defense, healthmax=100, energie=50, faim=50, bonheur=50):   
+    def __init__(self, name, categorie, type, health, level, base_attack, base_defense, healthmax=100, energie=50, faim=50, bonheur=50 ,condition="Normal"):   
         self.name = name
+        self.categorie = categorie
         self.type = type
         self.health = health 
         self.level = level
@@ -17,6 +20,9 @@ class Pokemon:
         self.experience_max = 100
         self.base_attack = base_attack
         self.base_defense = base_defense
+        self.condition = condition
+        self.inventory = {"Petite Potion": 0, "Moyenne Potion": 0, "Grande Potion": 0, "Potion Max": 0 , "Antidote": 0}
+        
         self.update_stats()
 
     def update_stats(self):
@@ -24,35 +30,36 @@ class Pokemon:
         self.defense = self.base_defense + (self.level - 1) * 2
 
     def __str__(self):
-        return f"Name: {self.name}, Type: {self.type}, Health: {self.health}/{self.healthmax}, Energie: {self.energie}/{self.energiemax}, Level: {self.level}, Experience: {self.experience}/{self.experience_max} Faim: {self.faim}/{self.faimmax}, Bonheur: {self.bonheur}/{self.bonheurmax}"
+        return f"{Fore.BLUE}Nom: {self.name}, {Fore.GREEN}Categorie: {self.categorie}, {Fore.RED}Health: {self.health}/{self.healthmax}, {Fore.YELLOW}Energie: {self.energie}/{self.energiemax}, {Fore.BLACK}Level: {self.level}, {Fore.CYAN}Experience: {self.experience}/{self.experience_max}, {Fore.WHITE}Faim: {self.faim}/{self.faimmax},{Fore.MAGENTA} Bonheur: {self.bonheur}/{self.bonheurmax}, {Fore.BLACK}Condition: {self.condition}"
     
     def Pokemon_parametre(self):
-        self.name = input("Enter the name of the Pokemon: ")
-        types = ["Carapuce", "Bulbizare", "Salameche"]
-        print("Choose of the Starter:")
-        for i, t in enumerate(types, 1):
+        self.name = input(f"{Fore.YELLOW + Style.BRIGHT}Entrez le nom du Pokémon: ")
+        categories = ["Carapuce", "Bulbizarre", "Salameche"]
+        categories_colored = [f"{Fore.CYAN + Style.BRIGHT}Carapuce", f"{Fore.GREEN + Style.BRIGHT}Bulbizarre", f"{Fore.RED + Style.BRIGHT}Salameche"]
+        print(f"{Fore.MAGENTA + Style.BRIGHT}Choix du starter:")
+        for i, t in enumerate(categories_colored, 1):
             print(f"{i}. {t}")
         
         while True:
             try:
-                choice = int(input("Enter the number corresponding to the Starter: "))
-                if 1 <= choice <= len(types):
+                choice = int(input(f"{Fore.BLUE + Style.BRIGHT}Entrez le numéro correspondant au Starter: "))
+                if 1 <= choice <= len(categories):
                     break
                 else:
-                    print("Invalid choice. Please enter a number between 1 and 3.")
+                    print("Choix invalide. Veuillez saisir un nombre entre 1 et 3.")
             except ValueError:
                 print("Invalid input. Please enter a number.")
         
-        type_choice = types[choice - 1]
+        categorie_choice = categories[choice - 1]
         level = 5
         
         pokemon_classes = {
             "Carapuce": "carapuce.Carapuce",
-            "Bulbizare": "bulbizare.Bulbizare",
+            "Bulbizarre": "bulbizarre.Bulbizarre",
             "Salameche": "salameche.Salameche"
         }
         
-        module_name, class_name = pokemon_classes[type_choice].rsplit(".", 1)
+        module_name, class_name = pokemon_classes[categorie_choice].rsplit(".", 1)
         module = __import__(f"models.{module_name}", fromlist=[class_name])
         pokemon_class = getattr(module, class_name)
         
@@ -62,8 +69,15 @@ class Pokemon:
         self.level += 1
         self.healthmax += 5
         self.energiemax += 5
+        self.condition = "Normal"
         self.health = self.healthmax
         self.energie = self.energiemax
         self.experience = 0
         self.experience_max += 25
         self.update_stats()
+
+    def add_to_inventory(self, item, quantity=1):
+        if item in self.inventory:
+            self.inventory[item] += quantity
+        else:
+            self.inventory[item] = quantity
