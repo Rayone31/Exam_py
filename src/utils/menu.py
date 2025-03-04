@@ -32,6 +32,7 @@ def menus(pokemon, event_message=None):
         print(f"{Fore.GREEN + Style.BRIGHT}  - {item}: {quantity}")
 
     print(f"{Fore.CYAN + Style.BRIGHT}\n========================================================================= Action =============================================================================\n")
+    ## Display actions
     for i, action in enumerate(actions, 1):
         print(f"{Fore.RED + Style.BRIGHT}{i}. {action.capitalize()}")
     print(f"{Fore.BLACK + Style.BRIGHT}\n______________________________________________________________________________________________________________________________________________________________")
@@ -48,7 +49,6 @@ def menus(pokemon, event_message=None):
             print(f"{Fore.RED}Entrée non valide. Veuillez saisir un nombre.")
     
     clear()
-    
     if not pokemon.alive:
         print(f"{Fore.RED + Style.BRIGHT}Game Over")
         return False

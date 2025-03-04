@@ -7,6 +7,8 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
+## Game function
+# This function is the main function of the game. It will generate random events and handle the game logic.
 def game(pokemon):
     while pokemon.alive:
         event = generate_random_event()
@@ -19,6 +21,7 @@ def game(pokemon):
                 print(f"{Fore.RED + Style.BRIGHT}Game Over")
                 return
         else:
+            ## Handle passive events
             if pokemon.health <= 0:
                 print(f"{pokemon.name} est mort.")
                 pokemon.alive = False
@@ -65,6 +68,7 @@ def game(pokemon):
             print(f"{Fore.RED + Style.BRIGHT}Game Over")
             return
 
+        ## Get the choice and action
         choice, action = menu_result
         actions = get_ordered_actions()
         if 1 <= choice <= len(actions):

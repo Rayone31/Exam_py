@@ -25,13 +25,16 @@ class Pokemon:
         
         self.update_stats()
 
+    ## this function updates the statistics of the pokemon attack and defense according to its level
     def update_stats(self):
         self.attack = self.base_attack + (self.level - 1) * 2
         self.defense = self.base_defense + (self.level - 1) * 2
 
+    ## this function shows the pokemon's statistics
     def __str__(self):
         return f"{Fore.BLUE}Nom: {self.name}, {Fore.GREEN}Categorie: {self.categorie}, {Fore.RED}Health: {self.health}/{self.healthmax}, {Fore.YELLOW}Energie: {self.energie}/{self.energiemax}, {Fore.BLACK}Level: {self.level}, {Fore.CYAN}Experience: {self.experience}/{self.experience_max}, {Fore.WHITE}Faim: {self.faim}/{self.faimmax},{Fore.MAGENTA} Bonheur: {self.bonheur}/{self.bonheurmax}, {Fore.BLACK}Condition: {self.condition}"
-    
+
+    ## this function allows the Pokemon parameters to be entered
     def Pokemon_parametre(self):
         self.name = input(f"{Fore.YELLOW + Style.BRIGHT}Entrez le nom du Pokémon: ")
         categories = ["Carapuce", "Bulbizarre", "Salameche"]
@@ -64,7 +67,8 @@ class Pokemon:
         pokemon_class = getattr(module, class_name)
         
         return pokemon_class(self.name, level)
-        
+    
+    ## this function allows the level of the pokemon to increase
     def levelUp(self):
         self.level += 1
         self.healthmax += 5
@@ -76,6 +80,7 @@ class Pokemon:
         self.experience_max += 25
         self.update_stats()
 
+    ## This function adds an item to the inventory
     def add_to_inventory(self, item, quantity=1):
         if item in self.inventory:
             self.inventory[item] += quantity

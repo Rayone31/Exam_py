@@ -5,6 +5,8 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
+## This function is the combat interface
+# This function handles the combat interface between the player's pokemon and the opponent's pokemon.
 def combat_interface(pokemon, opponent):
     original_pokemon_defense = pokemon.defense
     original_opponent_defense = opponent.defense
@@ -21,6 +23,7 @@ def combat_interface(pokemon, opponent):
         print(f"{Fore.GREEN + Style.BRIGHT}3. Se soigner")
         print(f"{Fore.BLACK + Style.BRIGHT}\n_______________________________________________________________________________________________________________")
         
+        ## Handle player choice
         while True:
             try:
                 choice = int(input(f"{Fore.YELLOW + Style.BRIGHT}Entre ton choix: "))
@@ -92,8 +95,9 @@ def combat_interface(pokemon, opponent):
                     for i, (item, quantity) in enumerate(pokemon.inventory.items(), 1):
                         print(f"{Fore.BLUE + Style.BRIGHT}{i}. {item} (Quantité: {quantity})")
                     print(f"{Fore.WHITE + Style.BRIGHT}{len(pokemon.inventory) + 1}. Retour")
-                    
+                
                     try:
+                        ## Handle potion choice
                         potion_choice = int(input(f"{Fore.BLUE + Style.BRIGHT}Entrez le numéro de la potion: "))
                         if 1 <= potion_choice <= len(pokemon.inventory):
                             potion_name = list(pokemon.inventory.keys())[potion_choice - 1]
@@ -120,6 +124,7 @@ def combat_interface(pokemon, opponent):
                     elif opponent_choice == 2:
                         print(f"{Fore.BLUE + Style.BRIGHT}{opponent.name} se défend contre votre prochaine attaque!")
 
+        ## Check if the combat is over
         if opponent.health <= 0 and pokemon.health <= 0:
             clear()
             print(f"{Fore.RED + Style.BRIGHT}Les deux Pokémon sont KO.")

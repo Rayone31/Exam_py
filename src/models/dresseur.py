@@ -9,6 +9,7 @@ class Dresseur:
         self.player_level = player_level
         self.pokemon = self.choose_random_pokemon()
 
+    ## Choose a random pokemon for the dresseur
     def choose_random_pokemon(self):
         level = random.randint(self.player_level - 3, self.player_level)
         pokemons = [Carapuce("Carapuce", level), Bulbizarre("Bulbizarre", level), Salameche("Salameche", level)]

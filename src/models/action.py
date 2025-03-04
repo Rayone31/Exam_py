@@ -1,6 +1,7 @@
 import random
 class Action:
 
+    ## This function allows the Pokemon to eat
     def Manger(self):
         self.faim = max(0, self.faim - 10)
         self.bonheur = min(self.bonheurmax, self.bonheur + 2)
@@ -10,6 +11,7 @@ class Action:
         if random_number <= 3:
             self.condition = "Empoisonnement"
 
+    ## This function allows the Pokemon to sleep
     def Dormir(self):
         self.energie = min(self.energiemax, self.energie + 10)
         self.bonheur = min(self.bonheurmax, self.bonheur + 3)
@@ -17,6 +19,7 @@ class Action:
         self.health = min(self.healthmax, self.health + 2)
         self.condition = "Normal"
 
+    ## This function allows the Pokemon to play
     def Jouer(self):
         self.bonheur = min(self.bonheurmax, self.bonheur + 10)
         self.energie = max(0, self.energie - 5)
@@ -25,7 +28,7 @@ class Action:
         if random_number <= 3:
             self.condition = "Confusion"
 
-    
+    ## This function does nothing
     def Rien(self):
         self.bonheur = max(0, self.bonheur - 5)
         self.energie = max(0, self.energie - 3)

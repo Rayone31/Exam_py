@@ -6,6 +6,7 @@ class Event:
         self.event_type = event_type
         self.action = action
 
+    ## Trigger the event
     def trigger(self, pokemon):
         if self.event_type == 'passive':
             return self._trigger_passive(pokemon)
@@ -13,7 +14,7 @@ class Event:
             return self._trigger_active()
         else:
             raise ValueError("Unknown event type")
-
+    ## Trigger the passive event
     def _trigger_passive(self, pokemon):
         if self.name == "Votre Pokémon a trouvé un objet":
             return self._found_item(pokemon)
@@ -21,9 +22,11 @@ class Event:
             return self._found_baia(pokemon)
         return f"Événement passif déclenché: {self.name}"
 
+    ## Trigger the active event
     def _trigger_active(self):
         return f"Événement actif déclenché: {self.name}. Action requise: {self.action}"
 
+    ## Handle the item found by the pokemon
     def _found_item(self, pokemon):
         items = ["Petite Potion", "Moyenne Potion", "Grande Potion", "Potion Max", "Antidote"]
         weights = [0.4, 0.2, 0.15, 0.05, 0.2]
@@ -31,6 +34,7 @@ class Event:
         pokemon.add_to_inventory(found_item)
         return f"Votre Pokémon a trouvé un objet: {found_item}"
     
+    ## Handle the baie found by the pokemon
     def _found_baia(self, pokemon):
         baies = ["Kébia", "Sitrus", "Mepo", "Wiki", "Framby"]
         weights = [0.2, 0.2, 0.2, 0.1, 0.3]
@@ -54,6 +58,7 @@ class Event:
         
         return f"Votre Pokémon a trouvé une baie: {found_baie} et l'a mangée"
 
+## Generate a random event
 def generate_random_event():
     events = [
         Event("Rien d'anormal n'est arrivé", "passive"),

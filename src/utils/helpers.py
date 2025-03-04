@@ -3,11 +3,12 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
-
+## clear functions
 def clear():
     import os
     os.system('cls' if os.name == 'nt' else 'clear')
 
+## This function prints the status of the pokemon
 def print_status(pokemon):
     statuses = []
     if pokemon.health <= 0:
@@ -37,13 +38,12 @@ def print_status(pokemon):
     if pokemon.condition == "Confusion":
         statuses.append(f"{pokemon.name} {Fore.BLACK + Style.BRIGHT} est confus.")
     
-    
-
     if not statuses:
         print("Aucun statut actuel")
     for status in statuses:
         print(status)
-        
+
+## This function prints the action and its effects
 def print_action(action):
     if action == 'Manger':
         print(f"{Fore.RED + Style.BRIGHT}vous avez mangé")
@@ -70,7 +70,8 @@ def print_action(action):
         print(f"{Fore.GREEN + Style.BRIGHT}vous avez gagné 6 points de faim")
     else:
         print(f"{Fore.RED + Style.BRIGHT}Action inconnue")
-        
+
+## This function returns the ordered actions 
 def get_ordered_actions():
     actions = [method for method in dir(Action) if callable(getattr(Action, method)) and not method.startswith("__")]
     order = ['Manger', 'Dormir', 'Jouer', 'Rien']
